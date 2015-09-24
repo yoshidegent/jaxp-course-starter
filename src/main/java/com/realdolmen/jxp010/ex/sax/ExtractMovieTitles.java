@@ -1,6 +1,5 @@
-package com.realdolmen.jxp010.sax.ex;
+package com.realdolmen.jxp010.ex.sax;
 
-import com.sun.deploy.xml.XMLParser;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
@@ -21,8 +20,17 @@ public class ExtractMovieTitles
             saxParserFactory.setNamespaceAware(false);
             saxParserFactory.setValidating(false);
             reader = saxParserFactory.newSAXParser().getXMLReader();
-            reader.setContentHandler(new FindTitles());
-            reader.parse("movies.xml");
+            TitleFinder titleFinder = new TitleFinder();
+            reader.setContentHandler(titleFinder);
+            reader.parse("./src/main/resources/movies.xml");
+
+            for(String s : titleFinder.getTitleList())
+            {
+                System.out.println(s + "; ");
+            }
+
+            System.out.println("Numbers of titles found: " + titleFinder.getTitleList().size());
+
 
         } catch (SAXException | ParserConfigurationException | IOException e) {
             e.printStackTrace();
