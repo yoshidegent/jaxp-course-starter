@@ -21,6 +21,8 @@ public class GroupIdAndVersionFinder implements ContentHandler {
     private boolean foundGroupId = false;
     private boolean foundVersion = false;
 
+    private boolean excluded = false;
+
     private String tempGroupId;
 
     @Override
@@ -50,6 +52,11 @@ public class GroupIdAndVersionFinder implements ContentHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+
+        if(qName.equals("exclusions"))
+        {
+            excluded = true;
+        }
 
         if(qName.equals("dependency"))
         {
@@ -83,26 +90,29 @@ public class GroupIdAndVersionFinder implements ContentHandler {
         {
             foundVersion = false;
         }
+
+        if(qName.equals("exclusions"))
+        {
+            excluded = false;
+        }
     }
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
-        if(foundDependency)
-        {
-            if(foundGroupId)
-            {
-                tempGroupId = new String(ch, start, length).trim();
+        if(!excluded) {
+            if (foundDependency) {
+                if (foundGroupId) {
+                    tempGroupId = new String(ch, start, length).trim();
 
-                if(!groupIdVersionMap.containsKey(tempGroupId))
-                {
-                    groupIdVersionMap.put(tempGroupId, "");
+                    if (!groupIdVersionMap.containsKey(tempGroupId)) {
+                        groupIdVersionMap.put(tempGroupId, "");
+                    }
                 }
-            }
 
-            if(foundVersion)
-            {
-                String tempVersion = new String(ch, start, length).trim();
-                groupIdVersionMap.put(tempGroupId, tempVersion);
+                if (foundVersion) {
+                    String tempVersion = new String(ch, start, length).trim();
+                    groupIdVersionMap.put(tempGroupId, tempVersion);
+                }
             }
         }
 
