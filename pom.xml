@@ -183,7 +183,6 @@
 					<clearOutputDir>false</clearOutputDir>
 					<outputDirectory>src/main/java</outputDirectory>
 					<schemaDirectory>src/main/resources/schemas</schemaDirectory>
-					<includeSchema>**/*.xsd</includeSchema>
 					<bindingDirectory>src/main/resources/bindings</bindingDirectory>
 					<enableIntrospection>false</enableIntrospection>
 				</configuration>
